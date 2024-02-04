@@ -1,0 +1,70 @@
+%SIGNAL
+PIN   6 =  A0 
+PIN   1 =  CLK 
+PIN   2 =  CLK2 
+PIN   5 = !CS 
+PIN   7 =  D0 
+PIN  11 = !OE 
+PIN  15 =  Q0 
+PIN  14 =  Q1 
+PIN  13 =  Q2 
+PIN  12 =  Q3 
+PIN   3 = !RESET 
+PIN   9 =  RUN 
+PIN  17 =  S0 
+PIN  16 =  S1 
+PIN  18 = !SD_CS 
+PIN  19 =  SD_SCK 
+PIN   4 = !WR 
+%END
+
+%FIELD
+FIELD shift_counter = Q0,Q1,Q2,Q3
+%END
+
+%EQUATION
+Q0.d  =>
+    !Q0 & Q3 & RESET
+
+Q1.d  =>
+    Q0 & !Q1 & Q3 & RESET
+  # !Q0 & Q1 & Q3 & RESET
+
+Q2.d  =>
+    Q0 & Q1 & !Q2 & Q3 & RESET
+  # !Q1 & Q2 & Q3 & RESET
+  # !Q0 & Q2 & Q3 & RESET
+
+Q3.d  =>
+    !A0 & !CS & !Q0 & !Q1 & !Q2 & !Q3 & !WR
+  # !Q2 & Q3 & RESET
+  # !Q1 & Q3 & RESET
+  # !Q0 & Q3 & RESET
+
+S0 =>
+    S1
+  # RUN
+
+S1 =>
+    !A0 & !CS & !WR
+
+SD_CS.d  =>
+    A0 & !CS & D0 & SD_CS & !WR
+  # RESET & !SD_CS & WR
+  # CS & RESET & !SD_CS
+  # !A0 & RESET & !SD_CS
+  # D0 & RESET & !SD_CS
+
+SD_SCK =>
+    !CLK2 & RUN
+
+S0.oe  =>
+    1 
+
+S1.oe  =>
+    1 
+
+SD_SCK.oe  =>
+    1 
+
+%END

@@ -1,0 +1,88 @@
+CSIM(WM): CUPL Simulation Program
+Version 5.0a Serial# 60008009
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+CREATED Wed Jan 24 19:19:36 2024
+
+LISTING FOR SIMULATION FILE: GP40_U40.si
+
+   1: Name            GP40_U40;
+   2: Partno          000001;
+   3: Revision        01;
+   4: Date            2024-01-20;
+   5: Designer        Mikica Kocic;
+   6: Company         3MBK;
+   7: Assembly        Galaksija 40;
+   8: Location        U40;
+   9: Device          g16v8ms;
+  10: 
+  11: 
+  12: FIELD shift_counter = [Q0,Q1,Q2,Q3];
+  13:
+  14: ORDER:  CLK, CLK2, RUN, %1,
+  15:         !OE, !RESET, %1,
+  16:         !CS, !WR, A0, D0, %2, 
+  17:         !SD_CS, SD_SCK, %2, 
+  18:         Q3, Q2, Q1, Q0, 
+  19:         %2, S1, S0; 
+  20: 
+  21: 
+
+==================================
+           !       !S             
+           R       SD             
+       C   E       D_             
+      CLR !S !!    _S             
+      LKU OE CWAD  CC  QQQQ  SS   
+      K2N ET SR00  SK  3210  10   
+==================================
+0001: P00 00 1100  XX  XXXX  XX
+RESET
+0002: 000 00 1100  XL  XXXX  LL
+0003: 110 00 1100  HL  LLLL  LL
+After RESET, idle
+0004: 000 01 1100  HL  LLLL  LL
+0005: 110 01 1100  HL  LLLL  LL
+Set !SD_CS = 0
+0006: 000 01 0011  HL  LLLL  LL
+0007: 110 01 0011  LL  LLLL  LL
+NOP
+0008: 000 01 1111  LL  LLLL  LL
+0009: 110 01 1111  LL  LLLL  LL
+Set !SD_CS = 1
+0010: 000 01 0010  LL  LLLL  LL
+0011: 110 01 0010  HL  LLLL  LL
+NOP
+0012: 000 01 1110  HL  LLLL  LL
+0013: 110 01 1110  HL  LLLL  LL
+Write SD data
+0014: 000 01 0000  HL  LLLL  HH
+0015: 110 01 0000  HL  HLLL  HH
+0016: 111 01 1100  HL  HLLL  LH
+Shift 1
+0017: 001 01 1100  HH  HLLL  LH
+0018: 111 01 1100  HL  HLLH  LH
+Shift 2
+0019: 001 01 1100  HH  HLLH  LH
+0020: 111 01 1100  HL  HLHL  LH
+Shift 3
+0021: 001 01 1100  HH  HLHL  LH
+0022: 111 01 1100  HL  HLHH  LH
+Shift 4
+0023: 001 01 1100  HH  HLHH  LH
+0024: 111 01 1100  HL  HHLL  LH
+Shift 5
+0025: 001 01 1100  HH  HHLL  LH
+0026: 111 01 1100  HL  HHLH  LH
+Shift 6
+0027: 001 01 1100  HH  HHLH  LH
+0028: 111 01 1100  HL  HHHL  LH
+Shift 7
+0029: 001 01 1100  HH  HHHL  LH
+0030: 111 01 1100  HL  HHHH  LH
+Shift 8
+0031: 001 01 1100  HH  HHHH  LH
+0032: 111 01 1100  HL  LLLL  LH
+After shifts, idle
+0033: 110 01 1100  HL  LLLL  LL
+0034: 000 01 1100  HL  LLLL  LL
+0035: 110 01 1100  HL  LLLL  LL

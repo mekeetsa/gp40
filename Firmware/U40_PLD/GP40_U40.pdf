@@ -1,0 +1,194 @@
+{COMPONENT C:\WINCUPL\GALAKSIJA\GP40_U40\GP40_U40.SYM
+
+ {ENVIRONMENT
+  {PDIFvrev 3.00}
+  {Program "CUPL(WM) Version 5.0a"}
+  {DBtype "Schematic"}
+  {DBvrev 1.01}
+  {DBtime "Wed Jan 24 19:19:35 2024 "}
+  {DBunit "MIL"}
+  {DBgrid 10}
+  {Lyrstr "WIRES" 1 "BUS" 1 "GATE" 2 "IEEE" 2 "PINFUN" 3 "PINNUM" 1 
+          "PINNAM" 6 "PINCON" 4 "REFDES" 2 "ATTR" 6 "SDOT" 1 
+          "DEVICE" 5 "OUTLIN" 5 "ATTR2" 6 "NOTES" 6 "NETNAM" 4 
+          "CMPNAM" 5 "BORDER" 5}
+ }
+
+ {USER
+  {VIEW
+   {Mode SYMB}
+   {Nlst OPEN}
+   {Vw 0 0 2}
+   {Lv 12 2 2 2 0 0 2 2 2 2 0 0 2 1 2 0 0 0 0}
+   {Gs 10 10}
+  }
+ }
+
+ {DISPLAY
+  [Ly "PINNUM"]
+  [Ls "SOLID"][Wd 0]
+  [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+ }
+
+ {SYMBOL
+  {PIN_DEF
+   [Ly "PINCON"]
+   {P OE' {Pt "INPUT"}{Lq 0}{Ploc 100 300}}
+   {P CLK {Pt "INPUT"}{Lq 0}{Ploc 100 280}}
+   {P CLK2 {Pt "INPUT"}{Lq 0}{Ploc 100 240}}
+   {P RESET' {Pt "INPUT"}{Lq 0}{Ploc 100 220}}
+   {P WR' {Pt "INPUT"}{Lq 0}{Ploc 100 200}}
+   {P CS' {Pt "INPUT"}{Lq 0}{Ploc 100 180}}
+   {P A0 {Pt "INPUT"}{Lq 0}{Ploc 100 160}}
+   {P D0 {Pt "INPUT"}{Lq 0}{Ploc 100 140}}
+   {P RUN {Pt "INPUT"}{Lq 0}{Ploc 100 120}}
+   {P Q3 {Pt "INPUT"}{Lq 0}{Ploc 100 100}}
+   {P Q2 {Pt "INPUT"}{Lq 0}{Ploc 100 80}}
+   {P Q1 {Pt "INPUT"}{Lq 0}{Ploc 100 60}}
+   {P Q0 {Pt "INPUT"}{Lq 0}{Ploc 100 40}}
+   {P SD_CS' {Pt "INPUT"}{Lq 0}{Ploc 100 20}}
+   {P S1 {Pt "I/O"}{Lq 0}{Ploc 310 20}}
+   {P S0 {Pt "I/O"}{Lq 0}{Ploc 310 40}}
+   {P SD_SCK {Pt "I/O"}{Lq 0}{Ploc 310 60}}
+  }
+
+  {PKG
+   [Ly "REFDES"]
+   [Ts 25][Tj "CB"][Tr 0][Tm "N"]
+   {Rdl 205 330}
+
+   [Ly "PINNUM"]
+   [Ts 15][Tj "RC"]
+   {Pnl 120 310}
+   {Pnl 120 290}
+   [Ts 15][Tj "RC"]
+   {Pnl 120 250}
+   {Pnl 120 230}
+   {Pnl 120 210}
+   {Pnl 120 190}
+   {Pnl 120 170}
+   {Pnl 120 150}
+   {Pnl 120 130}
+   {Pnl 120 110}
+   {Pnl 120 90}
+   {Pnl 120 70}
+   {Pnl 120 50}
+   {Pnl 120 30}
+   [Ts 15][Tj "LC"]
+   {Pnl 290 30}
+   {Pnl 290 50}
+   {Pnl 290 70}
+
+   {Sd A 11 1 2 3 4 5 6 7 9 12 13 14 15 18 16 17 19}
+  }
+
+  {PIC
+   [Ly "GATE"]
+   [Ts 15][Tj "LC"][Tr 0][Tm "N"]
+   {R 130 320 280 0}
+   {L 120 300 100 300}
+   {C 125 300 5}
+   {L 130 280 100 280}
+   {L 130 290 140 280 130 270}
+   {L 130 240 100 240}
+   {L 120 220 100 220}
+   {C 125 220 5}
+   {L 120 200 100 200}
+   {C 125 200 5}
+   {L 120 180 100 180}
+   {C 125 180 5}
+   {L 130 160 100 160}
+   {L 130 140 100 140}
+   {L 130 120 100 120}
+   {L 130 100 100 100}
+   {L 130 80 100 80}
+   {L 130 60 100 60}
+   {L 130 40 100 40}
+   {L 120 20 100 20}
+   {C 125 20 5}
+   {L 280 20 310 20}
+   {L 280 40 310 40}
+   {L 280 60 310 60}
+   [Ly "PINNAM"]
+   [Tj "LC"]
+   {T "OE'" 140 300}
+   {T "CLK" 140 280}
+   {T "CLK2" 140 240}
+   {T "RESET'" 140 220}
+   {T "WR'" 140 200}
+   {T "CS'" 140 180}
+   {T "A0" 140 160}
+   {T "D0" 140 140}
+   {T "RUN" 140 120}
+   {T "Q3" 140 100}
+   {T "Q2" 140 80}
+   {T "Q1" 140 60}
+   {T "Q0" 140 40}
+   {T "SD_CS'" 140 20}
+   [Tj "RC"]
+   {T "S1" 270 20}
+   {T "S0" 270 40}
+   {T "SD_SCK" 270 60}
+   [Ly "DEVICE"]
+   [Tj "CT"]
+   {T "G16V8MS" 205 -10}
+  }
+
+  {ATR
+   {IN
+    {Org 100 20}
+    {Ty 255}
+   }
+   {EX
+    [Ly "ATTR2"]
+    [Ts 12][Tj "CT"][Tr 0][Tm "N"]
+    {At PLD C:\WINCUPL\GALAKSIJA\GP40_U40\GP40_U40 205 320}
+   }
+  }
+ }
+
+ {DETAIL
+  {ANNOTATE
+  }
+
+  {NET_DEF
+   {N OE'
+   }
+   {N CLK
+   }
+   {N CLK2
+   }
+   {N RESET'
+   }
+   {N WR'
+   }
+   {N CS'
+   }
+   {N A0
+   }
+   {N D0
+   }
+   {N RUN
+   }
+   {N Q3
+   }
+   {N Q2
+   }
+   {N Q1
+   }
+   {N Q0
+   }
+   {N SD_CS'
+   }
+   {N S1
+   }
+   {N S0
+   }
+   {N SD_SCK
+   }
+  }
+
+  {SUBCOMP
+  }
+ }
+}

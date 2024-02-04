@@ -1,0 +1,212 @@
+
+*******************************************************************************
+                                   GP40_U40
+*******************************************************************************
+
+CUPL(WM)        5.0a Serial# 60008009
+Device          g16v8ms  Library DLIB-h-40-11
+Created         Wed Jan 24 19:19:35 2024
+Name            GP40_U40
+Partno          000001
+Revision        01
+Date            2024-01-20
+Designer        Mikica Kocic
+Company         3MBK
+Assembly        Galaksija 40
+Location        U40
+
+===============================================================================
+                            Expanded Product Terms
+===============================================================================
+
+Q0.d  =>
+    !Q0 & Q3 & !RESET
+
+Q1.d  =>
+    Q0 & !Q1 & Q3 & !RESET
+  # !Q0 & Q1 & Q3 & !RESET
+
+Q2.d  =>
+    Q0 & Q1 & !Q2 & Q3 & !RESET
+  # !Q1 & Q2 & Q3 & !RESET
+  # !Q0 & Q2 & Q3 & !RESET
+
+Q3.d  =>
+    !A0 & CS & !Q0 & !Q1 & !Q2 & !Q3 & WR
+  # !Q2 & Q3 & !RESET
+  # !Q1 & Q3 & !RESET
+  # !Q0 & Q3 & !RESET
+
+S0 =>
+    S1
+  # RUN
+
+S1 =>
+    !A0 & CS & WR
+
+SD_CS.d  =>
+    A0 & CS & D0 & !SD_CS & WR
+  # !RESET & SD_CS & !WR
+  # !CS & !RESET & SD_CS
+  # !A0 & !RESET & SD_CS
+  # D0 & !RESET & SD_CS
+
+SD_SCK =>
+    !CLK2 & RUN
+
+shift_counter =>
+    Q0 , Q1 , Q2 , Q3
+
+S0.oe  =>
+    1 
+
+S1.oe  =>
+    1 
+
+SD_SCK.oe  =>
+    1 
+
+
+===============================================================================
+                                 Symbol Table
+===============================================================================
+
+Pin Variable                                    Pterms   Max     Min    
+Pol   Name              Ext     Pin     Type     Used   Pterms  Level   
+--- --------            ---     ---     ----    ------  ------  -----   
+
+    A0                          6        V        -       -       -     
+    CLK                         1        V        -       -       -     
+    CLK2                        2        V        -       -       -     
+ !  CS                          5        V        -       -       -     
+    D0                          7        V        -       -       -     
+ !  OE                          11       V        -       -       -     
+    Q0                          15       V        -       -       -     
+    Q0                  d       15       X        1       8       4     
+    Q1                          14       V        -       -       -     
+    Q1                  d       14       X        2       8       4     
+    Q2                          13       V        -       -       -     
+    Q2                  d       13       X        3       8       4     
+    Q3                          12       V        -       -       -     
+    Q3                  d       12       X        4       8       4     
+ !  RESET                       3        V        -       -       -     
+    RUN                         9        V        -       -       -     
+    S0                          17       V        2       7       4     
+    S1                          16       V        1       7       4     
+ !  SD_CS                       18       V        -       -       -     
+ !  SD_CS               d       18       X        5       8       4     
+    SD_SCK                      19       V        1       7       4     
+ !  WR                          4        V        -       -       -     
+    shift_counter               0        F        -       -       -     
+    S0                  oe      17       D        1       1       0     
+    S1                  oe      16       D        1       1       0     
+    SD_SCK              oe      19       D        1       1       0     
+
+
+LEGEND    D : default variable         F : field      G : group
+          I : intermediate variable    N : node       M : extended node
+          U : undefined                V : variable   X : extended variable
+          T : function
+
+
+===============================================================================
+                                   Fuse Plot
+===============================================================================
+
+Syn   02192 x Ac0   02193 - 
+
+Pin #19  02048  Pol -  02120  Ac1 - 
+ 00000 -------------------------------- 
+ 00032 -x--------------------------x--- 
+ 00064 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00096 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00128 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00160 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00192 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00224 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #18  02049  Pol x  02121  Ac1 x 
+ 00256 ------x--x---x--x---x----------- 
+ 00288 ----x--xx----------------------- 
+ 00320 ----x--x----x------------------- 
+ 00352 ----x--x---------x-------------- 
+ 00384 ----x--x------------x----------- 
+ 00416 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00448 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00480 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #17  02050  Pol -  02122  Ac1 - 
+ 00512 -------------------------------- 
+ 00544 --------------x----------------- 
+ 00576 ----------------------------x--- 
+ 00608 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00640 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00672 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00704 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00736 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #16  02051  Pol -  02123  Ac1 - 
+ 00768 -------------------------------- 
+ 00800 ---------x---x---x-------------- 
+ 00832 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00864 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00896 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00928 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00960 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00992 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #15  02052  Pol -  02124  Ac1 x 
+ 01024 ----x--------------x----------x- 
+ 01056 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01088 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01120 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01152 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01184 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01216 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01248 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #14  02053  Pol -  02125  Ac1 x 
+ 01280 ----x-------------x----x------x- 
+ 01312 ----x--------------x--x-------x- 
+ 01344 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01376 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01408 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01440 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01472 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01504 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #13  02054  Pol -  02126  Ac1 x 
+ 01536 ----x-------------x---x----x--x- 
+ 01568 ----x------------------x--x---x- 
+ 01600 ----x--------------x------x---x- 
+ 01632 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01664 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01696 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01728 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01760 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #12  02055  Pol -  02127  Ac1 x 
+ 01792 ---------x---x---x-x---x---x---x 
+ 01824 ----x----------------------x--x- 
+ 01856 ----x------------------x------x- 
+ 01888 ----x--------------x----------x- 
+ 01920 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01952 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01984 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 02016 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+
+
+LEGEND    X : fuse not blown 
+          - : fuse blown 
+
+===============================================================================
+                                 Chip Diagram
+===============================================================================
+
+                               ______________
+                              |   GP40_U40   |
+                      CLK x---|1           20|---x Vcc                      
+                     CLK2 x---|2           19|---x SD_SCK                   
+                   !RESET x---|3           18|---x !SD_CS                   
+                      !WR x---|4           17|---x S0                       
+                      !CS x---|5           16|---x S1                       
+                       A0 x---|6           15|---x Q0                       
+                       D0 x---|7           14|---x Q1                       
+                          x---|8           13|---x Q2                       
+                      RUN x---|9           12|---x Q3                       
+                      GND x---|10          11|---x !OE                      
+                              |______________|
+

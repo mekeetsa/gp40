@@ -1,0 +1,117 @@
+LISTING FOR LOGIC DESCRIPTION FILE: GP40_U40.pld                     Page 1
+
+CUPL(WM): Universal Compiler for Programmable Logic
+Version 5.0a Serial# 60008009
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+Created Wed Jan 24 19:19:35 2024
+
+  1:Name            GP40_U40;
+  2:Partno          000001;
+  3:Revision        01;
+  4:Date            2024-01-20;
+  5:Designer        Mikica Kocic;
+  6:Company         3MBK;
+  7:Assembly        Galaksija 40;
+  8:Location        U40;
+  9:Device          g16v8ms;
+ 10:
+ 11:/* Allowable Target Device Types: g16v8ms */
+ 12:
+ 13:/** Inputs **/
+ 14:
+ 15:pin 1       =   CLK    ;
+ 16:pin 2       =   CLK2   ;   /* Tied to CLK (pin 1), used in logic */
+ 17:pin 3       = ! RESET  ;
+ 18:pin 4       = ! WR     ;
+ 19:pin 5       = ! CS     ;
+ 20:pin 6       =   A0     ;
+ 21:pin 7       =   D0     ;
+ 22:pin 9       =   RUN    ;   /* Tied to Q3 (pin 12), used in logic */
+ 23:pin 11      = ! OE     ;
+ 24:
+ 25:/** Outputs **/
+ 26:
+ 27:/* SD_CS, SD_SCK are routed to SD card */
+ 28:/* S0, S1 and CLK are routed to LS299 */
+ 29:
+ 30:pin 19      =   SD_SCK ;
+ 31:pin 18      = ! SD_CS  ;
+ 32:pin 17      =   S0     ;
+ 33:pin 16      =   S1     ;
+ 34:pin 15      =   Q0     ;
+ 35:pin 14      =   Q1     ;
+ 36:pin 13      =   Q2     ;
+ 37:pin 12      =   Q3     ; /* == RUN, feedback to pin 9 */
+ 38:
+ 39:/** Declarations and Intermediate Variable Definitions **/
+ 40:
+ 41:field shift_counter = [Q0..3] ;
+ 42:
+ 43:/** Logic Equations **/
+ 44:
+ 45:S1      = CS & WR & !A0 ;
+ 46:S0      = RUN # S1 ;
+ 47:SD_SCK  = RUN & !CLK2 ;
+ 48:
+ 49:/* SD chip select state machine */
+ 50:
+ 51:sequence SD_CS
+ 52:{
+ 53:  present 'b'0
+
+LISTING FOR LOGIC DESCRIPTION FILE: GP40_U40.pld                     Page 2
+
+CUPL(WM): Universal Compiler for Programmable Logic
+Version 5.0a Serial# 60008009
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+Created Wed Jan 24 19:19:35 2024
+
+ 54:    if RESET next 'b'0 ;
+ 55:    /* writing D0 = 1 to &X001 sets SD_CS = 1 */
+ 56:    if CS & WR & A0:1 & D0:1 next 'b'1 ;
+ 57:    default next 'b'0 ;
+ 58:  present 'b'1
+ 59:    if RESET next 'b'0 ;
+ 60:    /* writing D0 = 0 to &X001 sets SD_CS = 0 */
+ 61:    if CS & WR & A0:1 & D0:0 next 'b'0 ;
+ 62:    default next 'b'1 ;
+ 63:}
+ 64:
+ 65:/* Shift counter state machine.
+ 66:   Writing D0-D7 to LS299 starts the sequence C0 -> C1, ... C8, C0.
+ 67:   The top bit Q3 of shift_counter encodes the 'RUN' state.
+ 68:*/
+ 69:
+ 70:$define C0 'b'0000
+ 71:$define C1 'b'1000
+ 72:$define C2 'b'1001
+ 73:$define C3 'b'1010
+ 74:$define C4 'b'1011
+ 75:$define C5 'b'1100
+ 76:$define C6 'b'1101
+ 77:$define C7 'b'1110
+ 78:$define C8 'b'1111
+ 79:
+ 80:sequence shift_counter
+ 81:{
+ 82:  present 'b'0000
+ 83:    if RESET next 'b'0000 ;
+ 84:    /* writing D0-D7 to LS299 starts serial IO */
+ 85:    if CS & WR & A0:0 next 'b'1000;
+ 86:    default next 'b'0000 ;
+ 87:  present 'b'1000 if RESET next 'b'0000 ; default next 'b'1001 ;
+ 88:  present 'b'1001 if RESET next 'b'0000 ; default next 'b'1010 ;
+ 89:  present 'b'1010 if RESET next 'b'0000 ; default next 'b'1011 ;
+ 90:  present 'b'1011 if RESET next 'b'0000 ; default next 'b'1100 ;
+ 91:  present 'b'1100 if RESET next 'b'0000 ; default next 'b'1101 ;
+ 92:  present 'b'1101 if RESET next 'b'0000 ; default next 'b'1110 ;
+ 93:  present 'b'1110 if RESET next 'b'0000 ; default next 'b'1111 ;
+ 94:  present 'b'1111 if RESET next 'b'0000 ; default next 'b'0000 ;
+ 95:}
+ 96:
+ 97:
+
+
+
+Jedec Fuse Checksum       (57d4)
+Jedec Transmit Checksum   (22da)

@@ -1,0 +1,83 @@
+Name            GP40_U40;
+Partno          000001;
+Revision        01;
+Date            2024-01-20;
+Designer        Mikica Kocic;
+Company         3MBK;
+Assembly        Galaksija 40;
+Location        U40;
+Device          g16v8ms;
+
+
+ORDER:  CLK, CLK2, RUN, %1,
+        !OE, !RESET, %1,
+        !CS, !WR, A0, D0, %2, 
+        !SD_CS, SD_SCK, %2, 
+        Q3, Q2, Q1, Q0, 
+        %2, S1, S0; 
+
+
+VECTORS:
+/*
+==================================
+           !       !S             
+           R       SD             
+       C   E       D_             
+      CLR !S !!    _S             
+      LKU OE CWAD  CC  QQQQ  SS   
+      K2N ET SR00  SK  3210  10   
+==================================
+      Ccr OR CWAD  CS Q3210 S10
+==================================
+*/
+      P00 00 1100  XX  XXXX  XX
+                                 $msg "RESET";
+      000 00 1100  XL  XXXX  LL
+      110 00 1100  HL  LLLL  LL
+                                 $msg "After RESET, idle";
+      000 01 1100  HL  LLLL  LL
+      110 01 1100  HL  LLLL  LL
+                                 $msg "Set !SD_CS = 0";
+      000 01 0011  HL  LLLL  LL
+      110 01 0011  LL  LLLL  LL
+                                 $msg "NOP";
+      000 01 1111  LL  LLLL  LL
+      110 01 1111  LL  LLLL  LL
+                                 $msg "Set !SD_CS = 1";
+      000 01 0010  LL  LLLL  LL
+      110 01 0010  HL  LLLL  LL
+                                 $msg "NOP";
+      000 01 1110  HL  LLLL  LL
+      110 01 1110  HL  LLLL  LL
+                                 $msg "Write SD data";
+      000 01 0000  HL  LLLL  HH
+      110 01 0000  HL  HLLL  HH
+      111 01 1100  HL  HLLL  LH
+                                 $msg "Shift 1";
+      001 01 1100  HH  HLLL  LH
+      111 01 1100  HL  HLLH  LH
+                                 $msg "Shift 2";
+      001 01 1100  HH  HLLH  LH
+      111 01 1100  HL  HLHL  LH
+                                 $msg "Shift 3";
+      001 01 1100  HH  HLHL  LH
+      111 01 1100  HL  HLHH  LH
+                                 $msg "Shift 4";
+      001 01 1100  HH  HLHH  LH
+      111 01 1100  HL  HHLL  LH
+                                 $msg "Shift 5";
+      001 01 1100  HH  HHLL  LH
+      111 01 1100  HL  HHLH  LH
+                                 $msg "Shift 6";
+      001 01 1100  HH  HHLH  LH
+      111 01 1100  HL  HHHL  LH
+                                 $msg "Shift 7";
+      001 01 1100  HH  HHHL  LH
+      111 01 1100  HL  HHHH  LH
+                                 $msg "Shift 8";
+      001 01 1100  HH  HHHH  LH
+      111 01 1100  HL  LLLL  LH
+                                 $msg "After shifts, idle";
+      110 01 1100  HL  LLLL  LL
+      000 01 1100  HL  LLLL  LL
+      110 01 1100  HL  LLLL  LL

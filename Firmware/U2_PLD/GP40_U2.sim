@@ -1,0 +1,98 @@
+%SIGNAL
+PIN  16 =  A13R 
+PIN  19 =  A14R 
+PIN   4 =  A7 
+PIN   6 =  A10 
+PIN   7 =  A11 
+PIN   8 =  A12 
+PIN   5 =  A13 
+PIN   3 =  A14 
+PIN   2 =  A15 
+PIN  18 =  A7R 
+PIN  15 = !CSE 
+PIN  12 = !CSSD 
+PIN   9 =  D13 
+PIN  14 = !KEY 
+PIN   1 = !MREQ 
+PIN  17 = !RAM 
+PIN  13 = !ROM 
+%END
+
+%FIELD
+FIELD ADDR = A15,A14,A13
+%END
+
+%EQUATION
+A13R =>
+    A14 & A15 & !MREQ
+  # A13
+
+A14R =>
+    A14 & MREQ
+  # A14 & !A15
+  # A13 & A14
+
+A7R =>
+    !A7 & D13
+
+CSE =>
+    A13 & !A14 & A15 & !MREQ
+
+CSSD =>
+    A12 & !A13 & A14 & A15 & !MREQ
+  # A11 & !A13 & A14 & A15 & !MREQ
+
+KEY =>
+    !A11 & !A12 & A13 & !A14 & !A15 & !MREQ
+
+Q01 =>
+    !A13 & !A14 & !A15 & MREQ
+
+Q23 =>
+    A13 & !A14 & !A15 & MREQ
+
+Q45 =>
+    !A13 & A14 & !A15 & MREQ
+
+Q67 =>
+    A13 & A14 & !A15 & MREQ
+
+Q89 =>
+    !A13 & !A14 & A15 & MREQ
+
+QAB =>
+    A13 & !A14 & A15 & MREQ
+
+QCD =>
+    !A13 & A14 & A15 & MREQ
+
+QEF =>
+    A13 & A14 & A15 & MREQ
+
+RAM =>
+    A11 & !A12 & A13 & !A14 & !A15 & !MREQ
+  # A12 & A13 & !A14 & !A15 & !MREQ
+  # !A11 & !A12 & !A13 & A14 & !MREQ
+  # !A13 & !A14 & A15 & !MREQ
+  # A14 & !A15 & !MREQ
+
+RAM1 =>
+    A11 & A13 & !A14 & !A15 & MREQ
+  # A12 & A13 & !A14 & !A15 & MREQ
+
+RAM2 =>
+    A14 & !A15 & MREQ
+  # !A13 & !A14 & A15 & MREQ
+
+RAM3 =>
+    !A11 & !A12 & !A13 & A14 & A15 & MREQ
+
+ROM =>
+    !A13 & !A14 & !A15 & !MREQ
+  # A13 & A14 & A15 & !MREQ
+
+UPPER6K =>
+    A11
+  # A12
+
+%END

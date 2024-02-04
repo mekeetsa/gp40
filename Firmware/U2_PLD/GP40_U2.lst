@@ -1,0 +1,96 @@
+LISTING FOR LOGIC DESCRIPTION FILE: GP40_U2.pld                      Page 1
+
+CUPL(WM): Universal Compiler for Programmable Logic
+Version 5.0a Serial# 60008009
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+Created Tue Jan 30 23:53:38 2024
+
+  1:Name      GP40_U2;
+  2:Partno    000001;
+  3:Revision  01;
+  4:Date      2023-12-26;
+  5:Designer  Mikica Kocic;
+  6:Company   3MBK;
+  7:Assembly  Galaksija Plus 40;
+  8:Location  U2;
+  9:Device    g16v8;
+ 10:
+ 11:/** Inputs **/
+ 12:
+ 13:pin 1       = ! MREQ   ;
+ 14:pin 4       =   A7     ;
+ 15:pin 6       =   A10    ;
+ 16:pin 7       =   A11    ;
+ 17:pin 8       =   A12    ;
+ 18:pin 5       =   A13    ;
+ 19:pin 3       =   A14    ;
+ 20:pin 2       =   A15    ;
+ 21:pin 9       =   D13    ;
+ 22:
+ 23:/** Outputs **/
+ 24:
+ 25:pin 13      = ! ROM    ;
+ 26:pin 17      = ! RAM    ;
+ 27:pin 14      = ! KEY    ;
+ 28:pin 15      = ! CSE    ;
+ 29:pin 12      = ! CSSD   ;
+ 30:pin 18      =   A7R    ;
+ 31:pin 16      =   A13R   ;
+ 32:pin 19      =   A14R   ;
+ 33:
+ 34:/** Declarations and Intermediate Variable Definitions  **/
+ 35:
+ 36:field ADDR = [A15..13] ; /* Note that addr is a 16-bit indexed variable */
+ 37:
+ 38:/** Logic Equations **/
+ 39:
+ 40:/* Address decoding, 74LS145 */
+ 41:                                 /* Address bus [A15..0]                          */
+ 42:    Q01 = MREQ & ( ADDR:0000 ) ; /* 0000 - 1FFF: 4K ROM A, 4K ROM B               */
+ 43:    Q23 = MREQ & ( ADDR:2000 ) ; /* 2000 - 27FF: 2K keyboard and latch, !A11&!A12 */
+ 44:                                 /* 2000 - 2037: keyboard: 74LS145, 74LS251       */
+ 45:                                 /* 2038 - 2039: latch: 74LS574                   */
+ 46:                                 /* 2800 - 3FFF; upper 6K RAM (of 8K), A11#A12    */
+ 47:    Q45 = MREQ & ( ADDR:4000 ) ; /* 4000 - 5FFF: 8K RAM                           */
+ 48:    Q67 = MREQ & ( ADDR:6000 ) ; /* 6000 - 7FFF: 8K RAM                           */
+ 49:    Q89 = MREQ & ( ADDR:8000 ) ; /* 8000 - 9FFF: 8K RAM                           */
+ 50:    QAB = MREQ & ( ADDR:A000 ) ; /* A000 - BFFF: external CSE                     */
+ 51:    QCD = MREQ & ( ADDR:C000 ) ; /* C000 - C7FF: lower 2K RAM (of 8K)             */
+ 52:                                 /* C800 - DFFF: 6K CSSD                          */
+ 53:    QEF = MREQ & ( ADDR:E000 ) ; /* E000 - FFFF: 8K ROM C                         */
+
+LISTING FOR LOGIC DESCRIPTION FILE: GP40_U2.pld                      Page 2
+
+CUPL(WM): Universal Compiler for Programmable Logic
+Version 5.0a Serial# 60008009
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+Created Tue Jan 30 23:53:38 2024
+
+ 54:
+ 55:UPPER6K = A11 # A12 ;  /* DD8.1, 74LS32 */
+ 56:
+ 57:ROM  = Q01 # QEF ;      /* !ROM = !( !Q01 & !QEF ) */
+ 58:CSE  = QAB ;            /* !CSE = !QAB */
+ 59:
+ 60:/* !RAM = (!Q45) & (!Q67) & (!Q89) & (UPPER6K # !Q23) & (!UPPER6K # !QCD ) */
+ 61:/* RAM = Q45 # Q67 # Q89 # !(UPPER6K # !Q23) & !(!UPPER6K # !QCD ) */
+ 62:/* RAM = Q45 # Q67 # Q89 # ( Q23 & UPPER6K ) # ( QCD & !UPPER6K ) */
+ 63:
+ 64:RAM1 = Q23 & UPPER6K ;
+ 65:RAM2 = Q45 # Q67 # Q89 ;
+ 66:RAM3 = QCD & !UPPER6K ;
+ 67:RAM  = RAM1 # RAM2 # RAM3 ; 
+ 68:
+ 69:KEY  = Q23 & !UPPER6K ;    /* !KEY = UPPER6K # !Q23 */
+ 70:CSSD = QCD & UPPER6K ;     /* DD4.4, DD12.2 */
+ 71:
+ 72:A13R = QCD $ A13 ;         /* If ADDR:C000, invert A13 */
+ 73:A14R = QCD $ A14 ;         /* If ADDR:C000, invert A14 */
+ 74:A7R  = !( D13 & (!A7) );   /* A7R = !D13 # A7 */
+ 75:
+ 76:
+
+
+
+Jedec Fuse Checksum       (4936)
+Jedec Transmit Checksum   (fca3)

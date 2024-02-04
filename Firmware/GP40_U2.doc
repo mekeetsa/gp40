@@ -1,0 +1,244 @@
+
+*******************************************************************************
+                                    GP40_U2
+*******************************************************************************
+
+CUPL(WM)        5.0a Serial# 60008009
+Device          g16v8s  Library DLIB-h-40-9
+Created         Tue Jan 30 23:53:38 2024
+Name            GP40_U2
+Partno          000001
+Revision        01
+Date            2023-12-26
+Designer        Mikica Kocic
+Company         3MBK
+Assembly        Galaksija Plus 40
+Location        U2
+
+===============================================================================
+                            Expanded Product Terms
+===============================================================================
+
+A13R =>
+    A14 & A15 & MREQ
+  # A13
+
+A14R =>
+    A14 & !MREQ
+  # A14 & !A15
+  # A13 & A14
+
+A7R =>
+    !A7 & D13
+
+ADDR =>
+    A15 , A14 , A13
+
+CSE =>
+    A13 & !A14 & A15 & MREQ
+
+CSSD =>
+    A12 & !A13 & A14 & A15 & MREQ
+  # A11 & !A13 & A14 & A15 & MREQ
+
+KEY =>
+    !A11 & !A12 & A13 & !A14 & !A15 & MREQ
+
+Q01 =>
+    !A13 & !A14 & !A15 & MREQ
+
+Q23 =>
+    A13 & !A14 & !A15 & MREQ
+
+Q45 =>
+    !A13 & A14 & !A15 & MREQ
+
+Q67 =>
+    A13 & A14 & !A15 & MREQ
+
+Q89 =>
+    !A13 & !A14 & A15 & MREQ
+
+QAB =>
+    A13 & !A14 & A15 & MREQ
+
+QCD =>
+    !A13 & A14 & A15 & MREQ
+
+QEF =>
+    A13 & A14 & A15 & MREQ
+
+RAM =>
+    A11 & !A12 & A13 & !A14 & !A15 & MREQ
+  # A12 & A13 & !A14 & !A15 & MREQ
+  # !A11 & !A12 & !A13 & A14 & MREQ
+  # !A13 & !A14 & A15 & MREQ
+  # A14 & !A15 & MREQ
+
+RAM1 =>
+    A11 & A13 & !A14 & !A15 & MREQ
+  # A12 & A13 & !A14 & !A15 & MREQ
+
+RAM2 =>
+    A14 & !A15 & MREQ
+  # !A13 & !A14 & A15 & MREQ
+
+RAM3 =>
+    !A11 & !A12 & !A13 & A14 & A15 & MREQ
+
+ROM =>
+    !A13 & !A14 & !A15 & MREQ
+  # A13 & A14 & A15 & MREQ
+
+UPPER6K =>
+    A11
+  # A12
+
+
+===============================================================================
+                                 Symbol Table
+===============================================================================
+
+Pin Variable                                    Pterms   Max     Min    
+Pol   Name              Ext     Pin     Type     Used   Pterms  Level   
+--- --------            ---     ---     ----    ------  ------  -----   
+
+    A13R                        16       V        2       8       4     
+    A14R                        19       V        3       8       4     
+    A7                          4        V        -       -       -     
+    A10                         6        V        -       -       -     
+    A11                         7        V        -       -       -     
+    A12                         8        V        -       -       -     
+    A13                         5        V        -       -       -     
+    A14                         3        V        -       -       -     
+    A15                         2        V        -       -       -     
+    A7R                         18       V        1       8       4     
+    ADDR                        0        F        -       -       -     
+ !  CSE                         15       V        1       8       4     
+ !  CSSD                        12       V        2       8       4     
+    D13                         9        V        -       -       -     
+ !  KEY                         14       V        1       8       4     
+ !  MREQ                        1        V        -       -       -     
+    Q01                         0        I        1       -       -     
+    Q23                         0        I        1       -       -     
+    Q45                         0        I        1       -       -     
+    Q67                         0        I        1       -       -     
+    Q89                         0        I        1       -       -     
+    QAB                         0        I        1       -       -     
+    QCD                         0        I        1       -       -     
+    QEF                         0        I        1       -       -     
+ !  RAM                         17       V        5       8       4     
+    RAM1                        0        I        2       -       -     
+    RAM2                        0        I        2       -       -     
+    RAM3                        0        I        1       -       -     
+ !  ROM                         13       V        2       8       4     
+    UPPER6K                     0        I        2       -       -     
+
+
+LEGEND    D : default variable         F : field      G : group
+          I : intermediate variable    N : node       M : extended node
+          U : undefined                V : variable   X : extended variable
+          T : function
+
+
+===============================================================================
+                                   Fuse Plot
+===============================================================================
+
+Syn   02192 - Ac0   02193 x 
+
+Pin #19  02048  Pol -  02120  Ac1 x 
+ 00000 --x-x--------------------------- 
+ 00032 -x--x--------------------------- 
+ 00064 ----x-------x------------------- 
+ 00096 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00128 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00160 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00192 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00224 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #18  02049  Pol x  02121  Ac1 x 
+ 00256 ---------x------------------x--- 
+ 00288 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00320 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00352 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00384 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00416 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00448 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00480 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #17  02050  Pol x  02122  Ac1 x 
+ 00512 -x-x-x------x-------x----x------ 
+ 00544 -x-x-x------x-----------x------- 
+ 00576 ---xx--------x-------x---x------ 
+ 00608 x--x-x-------x------------------ 
+ 00640 -x-xx--------------------------- 
+ 00672 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00704 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00736 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #16  02051  Pol -  02123  Ac1 x 
+ 00768 x--xx--------------------------- 
+ 00800 ------------x------------------- 
+ 00832 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00864 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00896 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00928 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00960 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 00992 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #15  02052  Pol x  02124  Ac1 x 
+ 01024 x--x-x------x------------------- 
+ 01056 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01088 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01120 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01152 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01184 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01216 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01248 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #14  02053  Pol x  02125  Ac1 x 
+ 01280 -x-x-x------x--------x---x------ 
+ 01312 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01344 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01376 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01408 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01440 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01472 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01504 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #13  02054  Pol x  02126  Ac1 x 
+ 01536 -x-x-x-------x------------------ 
+ 01568 x--xx-------x------------------- 
+ 01600 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01632 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01664 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01696 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01728 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01760 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+Pin #12  02055  Pol x  02127  Ac1 x 
+ 01792 x--xx--------x----------x------- 
+ 01824 x--xx--------x------x----------- 
+ 01856 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01888 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01920 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01952 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 01984 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ 02016 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+
+
+LEGEND    X : fuse not blown 
+          - : fuse blown 
+
+===============================================================================
+                                 Chip Diagram
+===============================================================================
+
+                               ______________
+                              |   GP40_U2    |
+                    !MREQ x---|1           20|---x Vcc                      
+                      A15 x---|2           19|---x A14R                     
+                      A14 x---|3           18|---x A7R                      
+                       A7 x---|4           17|---x !RAM                     
+                      A13 x---|5           16|---x A13R                     
+                      A10 x---|6           15|---x !CSE                     
+                      A11 x---|7           14|---x !KEY                     
+                      A12 x---|8           13|---x !ROM                     
+                      D13 x---|9           12|---x !CSSD                    
+                      GND x---|10          11|---x                          
+                              |______________|
+

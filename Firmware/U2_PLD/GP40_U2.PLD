@@ -1,0 +1,74 @@
+Name      GP40_U2;
+Partno    000001;
+Revision  01;
+Date      2023-12-26;
+Designer  Mikica Kocic;
+Company   3MBK;
+Assembly  Galaksija Plus 40;
+Location  U2;
+Device    g16v8;
+
+/** Inputs **/
+
+pin 1       = ! MREQ   ;
+pin 4       =   A7     ;
+pin 6       =   A10    ;     /* currently unused */
+pin 7       =   A11    ;
+pin 8       =   A12    ;
+pin 5       =   A13    ;
+pin 3       =   A14    ;
+pin 2       =   A15    ;
+pin 9       =   D13    ;
+
+/** Outputs **/
+
+pin 13      = ! ROM    ;
+pin 17      = ! RAM    ;
+pin 14      = ! KEY    ;
+pin 15      = ! CSE    ;
+pin 12      = ! CSSD   ;
+pin 18      =   A7R    ;
+pin 16      =   A13R   ;
+pin 19      =   A14R   ;
+
+/** Declarations and Intermediate Variable Definitions	**/
+
+field ADDR = [A15..13] ; /* Note that addr is a 16-bit indexed variable */
+
+/** Logic Equations **/
+
+/* Address decoding, 74LS145 */
+                                 /* Address bus [A15..0]                          */
+    Q01 = MREQ & ( ADDR:0000 ) ; /* 0000 - 1FFF: 4K ROM A, 4K ROM B               */
+    Q23 = MREQ & ( ADDR:2000 ) ; /* 2000 - 27FF: 2K keyboard and latch, !A11&!A12 */
+                                 /* 2000 - 2037: keyboard: 74LS145, 74LS251       */
+                                 /* 2038 - 2039: latch: 74LS574                   */
+                                 /* 2800 - 3FFF; upper 6K RAM (of 8K), A11#A12    */
+    Q45 = MREQ & ( ADDR:4000 ) ; /* 4000 - 5FFF: 8K RAM                           */
+    Q67 = MREQ & ( ADDR:6000 ) ; /* 6000 - 7FFF: 8K RAM                           */
+    Q89 = MREQ & ( ADDR:8000 ) ; /* 8000 - 9FFF: 8K RAM                           */
+    QAB = MREQ & ( ADDR:A000 ) ; /* A000 - BFFF: external CSE                     */
+    QCD = MREQ & ( ADDR:C000 ) ; /* C000 - C7FF: lower 2K RAM (of 8K)             */
+                                 /* C800 - DFFF: 6K CSSD                          */
+    QEF = MREQ & ( ADDR:E000 ) ; /* E000 - FFFF: 8K ROM C                         */
+
+UPPER6K = A11 # A12 ;  /* DD8.1, 74LS32 */
+
+ROM  = Q01 # QEF ;      /* !ROM = !( !Q01 & !QEF ) */
+CSE  = QAB ;            /* !CSE = !QAB */
+
+/* !RAM = (!Q45) & (!Q67) & (!Q89) & (UPPER6K # !Q23) & (!UPPER6K # !QCD ) */
+/* RAM = Q45 # Q67 # Q89 # !(UPPER6K # !Q23) & !(!UPPER6K # !QCD ) */
+/* RAM = Q45 # Q67 # Q89 # ( Q23 & UPPER6K ) # ( QCD & !UPPER6K ) */
+
+RAM1 = Q23 & UPPER6K ;
+RAM2 = Q45 # Q67 # Q89 ;
+RAM3 = QCD & !UPPER6K ;
+RAM  = RAM1 # RAM2 # RAM3 ; 
+
+KEY  = Q23 & !UPPER6K ;    /* !KEY = UPPER6K # !Q23 */
+CSSD = QCD & UPPER6K ;     /* DD4.4, DD12.2 */
+
+A13R = QCD $ A13 ;         /* If ADDR:C000, invert A13 */
+A14R = QCD $ A14 ;         /* If ADDR:C000, invert A14 */
+A7R  = !( D13 & (!A7) );   /* A7R = !D13 # A7 */
