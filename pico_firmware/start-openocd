@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo openocd \
+  -f interface/cmsis-dap.cfg \
+  -c 'transport select swd' \
+  -c 'adapter speed 20000' \
+  -f target/rp2040.cfg
+
