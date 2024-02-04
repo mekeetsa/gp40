@@ -92,7 +92,11 @@ Contains SD DOS version v8.12 that supports the optimized SD interface
 
 ## PCB Images
 
+PCB release R1C and R1D
+
 ![GP40 R1C](images/GP40_R1C.jpg)
+
+PCB release R1A
 
 ![GP40 R1A](images/GP40_R1A.jpg)
 
