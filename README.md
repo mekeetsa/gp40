@@ -6,7 +6,8 @@ with the following modifications:
 - USB HID keyboard/mouse/gamepad interface using RPI Pico
 - a keyboard (optional) stackable either on the upper or the bottom side
 - proper composite video output (no need to reduce the power in voltage)
-- address decoder with ATF16V8B or g16v8s equivalent,
+- added an optional bus contention remover
+- address decoder with ATF16V8B or g16v8s equivalent
   which provides a configurable MEMRQ map with 1 kB granularity
 - improved SD hardware (SD now runs on the CPU clock)
 - SD DOS version 8.12
@@ -38,6 +39,7 @@ with the following modifications:
 - `GP40_U2.lgc` and `GP40_U40.lgc`, test vectors for XGecu Pro programmers
 
 ## Hardware memory map
+
 ```
   $0000...$0FFF  ROM A or 1: 4 kB (bootstrap and BASIC)
   $1000...$1FFF  ROM B or 2: 4 kB (math functions, etc.)
@@ -47,7 +49,7 @@ with the following modifications:
   $C800...$CFFF  SD HWM PVV interface: 2 kB
   $D000...$DFFF  Unused, 4 kB (routed to CS on the expansion bus)
   $E000...$EFFF  ROM 3: 4 KB (Galaksija Plus, graphics)
-  $F000...$FFFF  ROM 3: 4 KB (SD DOS)
+  $F000...$FFFF  ROM 4: 4 KB (SD DOS)
 ```
 
 ## Credits
