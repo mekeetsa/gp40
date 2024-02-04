@@ -1,0 +1,20 @@
+#!/bin/bash
+
+zipf="Schematic.zip"
+
+rm -rf svg2pdf_temp
+mkdir svg2pdf_temp
+mkdir svg2pdf_temp/svgs 
+
+cd svg2pdf_temp
+unzip ../${zipf}
+
+for file in *.svg
+do
+  xmllint --format "${file}" \
+  | sed -e 's#fill="transparent"#fill="none"#g' -e 's#fill="NONE"#fill="none"#g' -e 's#Verdana#Times New Roman#g' -e 's#monospace#Courier New#g' \
+  > svgs/${file}
+  inkscape --export-pdf="${file/.svg/.pdf}" svgs/${file}
+done
+
+zip ../${zipf} *.pdf
