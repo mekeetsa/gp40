@@ -89,3 +89,10 @@ Contains SD DOS version v8.12 that supports the optimized SD interface
 - Pico_USB_HID, USB HID (keyboard/mouse/gamepad) interface
 - PS2_KBD, PS/2 interface
 - Keyboard MX Cherry keyboard
+
+## PCB Images
+
+![GP40 R1C](images/GP40_R1C.jpg)
+
+![GP40 R1A](images/GP40_R1A.jpg)
+
