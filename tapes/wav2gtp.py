@@ -20,7 +20,7 @@ optional arguments:
   -t, --test            test the checksum and quit; default = False
   --oformat {gtp|raw}   output format; default: gtp
   -c CHANNEL, --channel CHANNEL
-                        audio channel; default: 1
+                        audio channel; default: 0 (auto)
   --hi HI               hystresis high-value for detection of a rising edge;
                         default: 0.1
   --low LOW             hysteresis low-value for detection of a rising edge;
@@ -61,7 +61,7 @@ parser.add_argument('output_file', nargs='?',
   help='output file name; by default input file.wav becomes output file.gtp')
 
 parser.add_argument('-c', '--channel', type=int,
-  default=1,
+  default=0,
   help='audio channel; default: 1')
 
 parser.add_argument('-t', '--test', action="count", default=0,
@@ -124,59 +124,53 @@ import scipy.io.wavfile as wf
 import warnings
 
 with warnings.catch_warnings():
-   warnings.simplefilter('ignore', wf.WavFileWarning)
-   sample_rate, samples = wf.read(args.input_file)
+    warnings.simplefilter('ignore', wf.WavFileWarning)
+    sample_rate, samples = wf.read(args.input_file)
 
 sample_count = samples.shape[0]
-number_of_channels = 1;
-if len(samples.shape) >= 2:
-    number_of_channels = samples.shape[1]
-    if args.channel >= 1 and args.channel <= number_of_channels:
-        samples = samples[:,args.channel - 1]
+number_of_channels = 1 if len(samples.shape) < 2 else samples.shape[1]
 
 if args.verbosity >= 0:
+    # ch_info = 'auto' if args.channel == 0 else str(args.channel)
     print(f"""Input WAV:
     File:           {args.input_file}
-    Channels:       {number_of_channels} (selected {args.channel})
+    Channels:       {number_of_channels}
     Data type:      {samples.dtype}
     Sample rate:    {sample_rate} Hz
     Length:         {sample_count} samples ({sample_count/sample_rate:.3f} s)""")
 
 ###############################################################################
-# Normalize data to float -1.0..+1.0
-###############################################################################
-
-if samples.dtype == 'int32':
-    data = samples / ( 1.0 + 2**(32 - 1) )
-elif samples.dtype == 'int16':
-    data = samples / ( 1.0 + 2**(16 - 1) )
-elif samples.dtype == 'uint8':
-    data = samples / 127.0 - 1.0
-elif samples.dtype == 'float32':
-    data = samples
-elif samples.dtype == 'float64':
-    data = samples
-else:
-    print(f"\nUnsupported encoding {samples.dtype}.\n")
-    exit(-1)
-
-###############################################################################
 # Decode audio samples recorded in the Galaksija tape format.
 ###############################################################################
 
-def decode_galaksija_tape(data):
+def decode_galaksija_tape(samples):
     """
-
     Parameters
     ----------
-    data : float
-        Samples normalized between -1.0 and 1.0.
+    samples : float
+        Wav samples (accepted: int32, int16, uint8, float32 and float64)
 
     Returns
     -------
-    string : 
-        Decoded octets.
+    int array:
+        Decoded octets (or [] in case of an error).
     """
+
+    # Normalize data to float -1.0..+1.0
+
+    if samples.dtype == 'int32':
+        data = samples / ( 1.0 + 2**(32 - 1) )
+    elif samples.dtype == 'int16':
+        data = samples / ( 1.0 + 2**(16 - 1) )
+    elif samples.dtype == 'uint8':
+        data = samples / 127.0 - 1.0
+    elif samples.dtype == 'float32':
+        data = samples
+    elif samples.dtype == 'float64':
+        data = samples
+    else:
+        print(f"\nUnsupported encoding {samples.dtype}.\n")
+        return []
 
     state = 0
     last_t = 0
@@ -185,7 +179,7 @@ def decode_galaksija_tape(data):
 
     # We first detects the rising edges of the signal
     # then measure (decode) the period between them.
-    # The code string contains:
+    # The rising_edges string contains:
     #     '_ |' = a gap
     #     '_|'  = a short pause
     #     '|'   = a very short pause
@@ -214,7 +208,7 @@ def decode_galaksija_tape(data):
     if found_error:
         print("\nRising edges:", rising_edges)
         print("\nError: neither 0 nor 1 detected in the stream.\n")
-        exit(-1)
+        return []
 
     if args.verbosity >= 3:
         print("\nRising edges:", rising_edges)
@@ -236,6 +230,7 @@ def decode_galaksija_tape(data):
     octets = []
     found_magic_octet = False
     magic_octet = 0xA5  # Leading octets before the magic are ignored
+    leader = []
    
     for i in range(0, len(bits), 8):
         
@@ -247,51 +242,98 @@ def decode_galaksija_tape(data):
             found_magic_octet = True
         if found_magic_octet:
             octets.append(octet)
-        elif octet != 0:
+        elif octet == 0:
+            leader.append(octet)
+        else:
+            leader.append(octet)
             print("Warning: Ignored a non-zero lead:", octet)
             
-    return octets
+    # Format (ref. Tomaz Solc, Replika mikroracunalnika Galaksija): 
+    # 0xA5, START ADDR (16-bit), END ADDR + 1 (16-bit), data, CKSUM, TRAILER 
 
-octets = decode_galaksija_tape(data)
+    octets_len = len(octets)
+    if octets_len < 5:
+        print("Data stream has no header.")
+        return []
 
-# Format (ref. Tomaz Solc, Replika mikroracunalnika Galaksija): 
-# 0xA5, START ADDR (16-bit), END ADDR + 1 (16-bit), data, CKSUM, TRAILER 
+    mem_addr1 = octets[1] + octets[2] * 256
+    mem_addr2 = octets[3] + octets[4] * 256
+    mem_len = mem_addr2 - mem_addr1
 
-octets_len = len(octets)
-octetsum = sum(octets[:-1]) % 0x100 # without the trailer
+    data_len = mem_len + 1 + 2 + 2 + 1
+    trailer_len = len(octets) - data_len
+    octetsum = sum(octets[:data_len]) % 0x100 # without the trailer
+    checksum = octets[data_len-1]
 
-mem_addr1 = octets[1] + octets[2] * 256
-mem_addr2 = octets[3] + octets[4] * 256
-mem_len = mem_addr2 - mem_addr1
-checksum = octets[octets_len-2]
-trailer = octets[octets_len-1]
+    is_OK = octetsum == 0xFF
+    is_BASIC = mem_addr1 == 0x2C36
+    checksum_warning = "" if is_OK else ", WARNING: Not 0xFF!" 
 
-is_OK = octetsum == 0xFF
-is_BASIC = mem_addr1 == 0x2C36
-checksum_warning = "" if is_OK else ", WARNING: Not 0xFF!" 
+    if trailer_len < 0:
+        print("Data stream is too short.")
+        return []
+    elif trailer_len == 0:
+        trailer = []
+    else:
+        trailer = octets[data_len:]
 
-if args.verbosity >= 0:
-    print(f"""Data stream:
+    if trailer_len <= 3:
+        trailer_info = f"{[ '0x{:02x}'.format(i) for i in trailer ]}".replace("'","")
+    else:
+        trailer_info = (
+           f"[ 0x{trailer[0]:02x}, 0x{trailer[1]:02x}, 0x{trailer[2]:02x}, ... ] " +
+           f"({trailer_len} bytes)" )
+
+    if args.verbosity >= 0:
+        print(f"""Data stream:
     Length:         0x{len(octets):04x} ({len(octets):d} bytes)
-    Octetsum:       0x{octetsum:02x}{checksum_warning}
     Magic:          0x{octets[0]:02x}
+    Leader:         {len(leader)} bytes
+    Trailer:        {trailer_info}
     Mem start:      0x{mem_addr1:04x}
     Mem end+1:      0x{mem_addr2:04x}
     Mem len:        0x{mem_len:04x} ({mem_len:d} bytes)
-    Checksum:       0x{checksum:02x}
-    Trailer:        0x{trailer:02x}
     BASIC?          {is_BASIC}
+    Checksum:       0x{checksum:02x}
+    Octetsum:       0x{octetsum:02x}{checksum_warning}
     Octetsum OK?    {is_OK}""")
 
-if args.test:
-    if is_OK:
-        print(f"{args.input_file} checksum OK,",
-              f"len diff = {mem_len+1+4+2-octets_len}")
-        exit(0)
+    if args.test:
+        if is_OK:
+            print(f"{args.input_file} checksum OK,",
+                  f"leader_len = {len(leader)}, trailer_len = {trailer_len}")
+            exit(0)
+        else:
+            print(f"{args.input_file} checksum ERROR 0x{octetsum:02x},",
+                  f"leader_len = {len(leader)}, trailer_len = {trailer_len}")
+            exit(-1)
+
+    return octets
+
+###############################################################################
+# Decode either a specific channel or go through all the channels
+###############################################################################
+
+if args.channel >= 1 and args.channel <= number_of_channels:
+    # Specific channel
+    if number_of_channels == 1:
+        octets = decode_galaksija_tape(samples)
     else:
-        print(f"{args.input_file} checksum ERROR 0x{octetsum:02x},",
-              f"len diff = {mem_len+1+4+2-octets_len}")
-        exit(-1)
+        octets = decode_galaksija_tape(samples[:,args.channel - 1])
+elif number_of_channels == 1:
+    # Automatic channel and number_of_channels == 1
+    octets = decode_galaksija_tape(samples)
+else:
+    # Automatic channel and number_of_channels > 1
+    for c in range(number_of_channels):
+        if args.verbosity >= 0:
+            print(f"    Using channel:  {c+1}")
+        octets = decode_galaksija_tape(samples[:,c])
+        if octets != []:
+            break
+
+if octets == []:
+    exit(-1)
 
 ###############################################################################
 # Save the output
@@ -315,7 +357,7 @@ if args.oformat == 'raw':
 # Encapsulate the decoded octets in the GTP format
 
 if args.oformat == 'gtp':
-    gtp_header = [0x00, octets_len % 256, octets_len // 256, 0x00, 0x00]
+    gtp_header = [0x00, len(octets) % 256, len(octets) // 256, 0x00, 0x00]
     gtp = gtp_header + octets
 
     if args.verbosity >= 2:
